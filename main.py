@@ -44,3 +44,32 @@ def get_posts(id:int, response=Response):
             return{"Retrieved Post": f'Here is your post{post}'} 
         
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'post with id{id} does not exists')
+
+
+@app.delete("/posts/{id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_post(id:int):
+    for p in my_posts:
+        if p['id'] == id:
+            my_posts.remove(my_posts[id-1])
+            return Response(status_code=status.HTTP_204_NO_CONTENT)
+        else:
+
+            raise HTTPException(status_code=status.HTTP_204_NO_CONTENT, detail=f"Post with this {id} does not exists")
+
+
+@app.put("/posts/{id}")
+
+def update_post(id:int, post: Post):
+        
+        
+        print(post.model_dump())
+        for p in my_posts:
+
+            if p['id'] == id :
+               
+               post_dict = post.model_dump()
+               my_posts[id-1] = post_dict
+
+               return f"Post with id {id} was successfuly updated {post.model_dump()}"
+ 
+            return f"Post with this id {id} does not exists "
